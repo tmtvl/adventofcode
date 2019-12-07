@@ -20,7 +20,9 @@ int is_valid_candidate(char *candidate)
   int i;
   char cur;
   char prev = candidate[0];
+  char duplicate_char = '\0';
   int duplicate = 0;
+  char duplicate_lock = 0;
 
   for (i = 1; i < 6; i++) {
     cur = candidate[i];
@@ -31,13 +33,31 @@ int is_valid_candidate(char *candidate)
       }
     if (cur == prev)
       {
-	duplicate = 1;
+	if (duplicate == 1)
+	  {
+	    duplicate = 0;
+	    duplicate_char = cur;
+	  }
+	else if (cur != duplicate_char)
+	  {
+	    duplicate = 1;
+	  }
+      }
+    else if (duplicate == 1)
+      {
+	duplicate = 0;
+	duplicate_lock = 1;
       }
     
     prev = cur;
   }
+
+  if (duplicate == 1)
+    {
+      duplicate_lock = 1;
+    }
   
-  return duplicate;
+  return duplicate_lock;
 }
 
 void next_candidate(char *candidate)
